@@ -156,7 +156,7 @@ BEGIN TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
 SELECT * FROM autoservice_schema."order" WHERE id = 12;
 ```
 
-![img_133.png](s1/images-0/img_133.png)
+![img_133.png](images-0/img_133.png)
 
 
 T1:
@@ -169,7 +169,7 @@ T2:
 SELECT * FROM autoservice_schema."order" WHERE id = 12;
 ```
 
-![img_134.png](s1/images-0/img_134.png)
+![img_134.png](images-0/img_134.png)
 
 Видим, что данные в T2 обновились только после COMMIT в T1, несмотря на выставленный уровень READ UNCOMMITTED
 Вывод, postgres не разрешает READ UNCOMMITTED
@@ -185,7 +185,7 @@ FROM autoservice_schema."order"
 WHERE id = 12;
 ```
 
-![img_127.png](s1/images-0/img_127.png)
+![img_127.png](images-0/img_127.png)
 
 T2:
 ```sql
@@ -201,7 +201,7 @@ FROM autoservice_schema."order"
 WHERE id = 12;
 ```
 
-![img_128.png](s1/images-0/img_128.png)
+![img_128.png](images-0/img_128.png)
 
 Если во время выполнения T1, другая транзакция изменит данные, то T1 будет использовать изменённые данные, что не всегда ожидаемо
 
@@ -217,7 +217,7 @@ SELECT *
 FROM autoservice_schema."order"
 WHERE id = 12;
 ```
-![img_129.png](s1/images-0/img_129.png)
+![img_129.png](images-0/img_129.png)
 
 T2:
 ```sql
@@ -233,7 +233,7 @@ SELECT * FROM autoservice_schema."order" WHERE id = 12;
 COMMIT;
 ```
 
-![img_130.png](s1/images-0/img_130.png)
+![img_130.png](images-0/img_130.png)
 
 #### фантомное чтение через INSERT в T2
 
@@ -246,7 +246,7 @@ FROM autoservice_schema.customer
 WHERE id > 10;
 ```
 
-![img_131.png](s1/images-0/img_131.png)
+![img_131.png](images-0/img_131.png)
 
 T2:
 ```sql
@@ -264,7 +264,7 @@ WHERE id > 10;
 COMMIT;
 ```
 
-![img_132.png](s1/images-0/img_132.png)
+![img_132.png](images-0/img_132.png)
 
 Можно сделать вывод, что в postgres при уровне REPEATABLE READ фантомное чтение невозможно, несмотря на таблицу
 Для этого нужно понизить уровень изоляции до READ COMMITTED
@@ -292,7 +292,7 @@ COMMIT;
 
 Здесь запрос не выполнялся, пока не дождался коммита на предыдущем
 
-![img_135.png](s1/images-0/img_135.png)
+![img_135.png](images-0/img_135.png)
 
 T1:
 ```sql
@@ -301,7 +301,7 @@ COMMIT;
 
 Теперь выполнился T2 и вызвал ошибку could not serialize access due to concurrent update
 
-![img_136.png](s1/images-0/img_136.png)
+![img_136.png](images-0/img_136.png)
 
 Повторим T2
 ```sql
@@ -313,14 +313,14 @@ UPDATE autoservice_schema.customer SET full_name = 'Паровозов Олла�
 COMMIT;
 ```
 Успешно
-![img_137.png](s1/images-0/img_137.png)
+![img_137.png](images-0/img_137.png)
 
 
 ## 3. SAVEPOINT
 
 Изначально таблица выглядит так:
 
-![img_138.png](s1/images-0/img_138.png)
+![img_138.png](images-0/img_138.png)
 
 
 ```sql
@@ -336,7 +336,7 @@ FROM autoservice_schema.customer
 WHERE id >= 15;
 ```
 
-![img_139.png](s1/images-0/img_139.png)
+![img_139.png](images-0/img_139.png)
 
 
 Откатываемся до первой точки сохранения
@@ -348,7 +348,7 @@ FROM autoservice_schema.customer
 WHERE id >= 15;
 ```
 
-![img_140.png](s1/images-0/img_140.png)
+![img_140.png](images-0/img_140.png)
 
 Откатываемся до второй сохранения
 ```sql
@@ -359,7 +359,7 @@ FROM autoservice_schema.customer
 WHERE id >= 15;
 ```
 
-![img_141.png](s1/images-0/img_141.png)
+![img_141.png](images-0/img_141.png)
 
 Ожидаемо ловим ошибку, так как, откатившивсь на первую точку сохранения бд уже не знает о существовании второй, объявленной позже
 
@@ -428,7 +428,7 @@ BEGIN TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
 select id, provider_id, date, value
 from autoservice_schema.purchase where id = 3;
 ```
-![img.png](s1/images-ZhenShen-18-11-25/img.png)
+![img.png](images-ZhenShen-18-11-25/img.png)
 
 Запрос в Т1
 ```sql
@@ -440,7 +440,7 @@ COMMIT;
 select id, provider_id, date, value
 from autoservice_schema.purchase where id = 3;
 ```
-![img_1.png](s1/images-ZhenShen-18-11-25/img_1.png)
+![img_1.png](images-ZhenShen-18-11-25/img_1.png)
 
 
 ### Неповторяющееся чтение
@@ -451,7 +451,7 @@ BEGIN TRANSACTION ISOLATION LEVEL READ COMMITTED;
 select id, provider_id, date, value
 from autoservice_schema.purchase where id = 3;
 ```
-![img_2.png](s1/images-ZhenShen-18-11-25/img_2.png)
+![img_2.png](images-ZhenShen-18-11-25/img_2.png)
 
 T2
 ```sql
@@ -466,7 +466,7 @@ select id, provider_id, date, value
 from autoservice_schema.purchase where id = 3;
 COMMIT;
 ```
-![img_3.png](s1/images-ZhenShen-18-11-25/img_3.png)
+![img_3.png](images-ZhenShen-18-11-25/img_3.png)
 
 ### Повторяющееся чтение (Т1 не видит изменения Т2, пока не завершится)
 
@@ -476,7 +476,7 @@ BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 select id, provider_id, date, value
 from autoservice_schema.purchase where id = 3;
 ```
-![img_4.png](s1/images-ZhenShen-18-11-25/img_4.png)
+![img_4.png](images-ZhenShen-18-11-25/img_4.png)
 
 T2
 ```sql
@@ -490,10 +490,10 @@ select id, provider_id, date, value
 from autoservice_schema.purchase where id = 3;
 COMMIT;
 ```
-![img_5.png](s1/images-ZhenShen-18-11-25/img_5.png)
+![img_5.png](images-ZhenShen-18-11-25/img_5.png)
 
 БД после Т1 и Т2
-![img_6.png](s1/images-ZhenShen-18-11-25/img_6.png)
+![img_6.png](images-ZhenShen-18-11-25/img_6.png)
 
 
 ### Повторяющееся чтение (Фантомное чтение через INSERT)
@@ -504,7 +504,7 @@ BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 select id, provider_id, date, value
 from autoservice_schema.purchase where value > 40000.0;
 ```
-![img_8.png](s1/images-ZhenShen-18-11-25/img_8.png)
+![img_8.png](images-ZhenShen-18-11-25/img_8.png)
 
 T2
 ```sql
@@ -518,7 +518,7 @@ T1
 select id, provider_id, date, value
 from autoservice_schema.purchase where value > 40000.0;
 ```
-![img_7.png](s1/images-ZhenShen-18-11-25/img_7.png)
+![img_7.png](images-ZhenShen-18-11-25/img_7.png)
 
 ### SERIALIZABLE - конфликт когда две транзакции вставляют одинаковые данные
 T1
@@ -527,7 +527,7 @@ BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 SELECT id, provider_id, date, value
 FROM autoservice_schema.purchase where id = 3;
 ```
-![img_12.png](s1/images-ZhenShen-18-11-25/img_12.png)
+![img_12.png](images-ZhenShen-18-11-25/img_12.png)
 
 T2
 ```sql
@@ -535,7 +535,7 @@ BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 SELECT id, provider_id, date, value
 FROM autoservice_schema.purchase where id = 3;
 ```
-![img_13.png](s1/images-ZhenShen-18-11-25/img_13.png)
+![img_13.png](images-ZhenShen-18-11-25/img_13.png)
 
 T1
 ```sql
@@ -547,7 +547,7 @@ T2
 ```sql
 UPDATE autoservice_schema.purchase SET value = value - 1000.0 where id = 3;
 ```
-![img_14.png](s1/images-ZhenShen-18-11-25/img_14.png)
+![img_14.png](images-ZhenShen-18-11-25/img_14.png)
 
 T2
 ```sql
@@ -558,7 +558,7 @@ SELECT id, provider_id, date, value
 FROM autoservice_schema.purchase where id = 3;
 COMMIT;
 ```
-![img_15.png](s1/images-ZhenShen-18-11-25/img_15.png)
+![img_15.png](images-ZhenShen-18-11-25/img_15.png)
 
 ### Один SAVEPOINT
 Создали закупку
@@ -580,7 +580,7 @@ COMMIT;
 SELECT id, name, purchase_id, task_id
 FROM autoservice_schema.autopart where purchase_id = 23;
 ```
-![img_16.png](s1/images-ZhenShen-18-11-25/img_16.png)
+![img_16.png](images-ZhenShen-18-11-25/img_16.png)
 
 
 ### Два SAVEPOINT
@@ -603,13 +603,13 @@ SELECT id, provider_id, date, value
 FROM autoservice_schema.purchase where  id = 24;
 ```
 Первый селект (после первого роллбека):
-![img_17.png](s1/images-ZhenShen-18-11-25/img_17.png)
+![img_17.png](images-ZhenShen-18-11-25/img_17.png)
 Мы видим, что осталось только деталь Name1, а добавление деталей Name2 и Name3 откатилось
 
 Второй (после роллбека):
-![img_18.png](s1/images-ZhenShen-18-11-25/img_18.png)
+![img_18.png](images-ZhenShen-18-11-25/img_18.png)
 Мы видим что откатилось добавление всех деталей
 
 Третий (после коммита)
-![img_19.png](s1/images-ZhenShen-18-11-25/img_19.png)
+![img_19.png](images-ZhenShen-18-11-25/img_19.png)
 Мы видим что хоть мы и делали откаты, но добавление закупки осталось после транзакции

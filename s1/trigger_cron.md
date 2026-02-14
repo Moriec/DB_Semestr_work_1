@@ -29,7 +29,7 @@ VALUES (999, '2015-11-24 00:00:00.000000', 'Премия', 1);
 INSERT INTO autoservice_schema.payout (value, payout_type, worker_id)
 VALUES (999, 'Премия', 1);
 ```
-![img_1.png](s1/imagezhneshen-01-12/img_1.png)
+![img_1.png](imagezhneshen-01-12/img_1.png)
 
 #### 1.1.1 если новая цена задачи меньше старой, то возвращаем старую
 ```sql
@@ -63,7 +63,7 @@ FROM autoservice_schema.task
 WHERE id = 26;
 ```
 
-![img_27.png](s1/images-damir-01-12-25/img_27.png)
+![img_27.png](images-damir-01-12-25/img_27.png)
 
 
 ### OLD
@@ -95,7 +95,7 @@ FROM autoservice_schema.task
 WHERE id = 24;
 ```
 
-![img_26.png](s1/images-damir-01-12-25/img_26.png)
+![img_26.png](images-damir-01-12-25/img_26.png)
 
 #### Триггер OLD. Блокировка изменения VIN
 
@@ -119,7 +119,7 @@ UPDATE autoservice_schema.car
 SET vin = 'NEW_FAKE_VIN_1234' 
 WHERE vin = 'WVWZZZ1JZXW000001';
 ```
-![](s1/images-07-dima/vin1.png)
+![](images-07-dima/vin1.png)
 
 ### BEFORE
 #### 1.3.1 триггер ставит цену задачи 100, если она меньше
@@ -147,7 +147,7 @@ SELECT order_id, value
 FROM autoservice_schema.task
 WHERE description = 'ура ура гол';
 ```
-![img_25.png](s1/images-damir-01-12-25/img_25.png)
+![img_25.png](images-damir-01-12-25/img_25.png)
 
 
 
@@ -180,7 +180,7 @@ WHERE description = 'Попытка ввода неверной цены'
 ORDER BY id DESC LIMIT 1;
 ```
 
-![](s1/images-07-dima/vin2.png)
+![](images-07-dima/vin2.png)
 
 
 
@@ -212,7 +212,7 @@ EXECUTE FUNCTION log_car_status_update();
 ```sql
 UPDATE autoservice_schema.car SET status = 'В работе' where vin = '4T1BF1AK6CU12345';
 ```
-![img_2.png](s1/imagezhneshen-01-12/img_2.png)
+![img_2.png](imagezhneshen-01-12/img_2.png)
 
 
 #### 1.4.1 триггер пишет в консоль при создании нового пользователя
@@ -266,11 +266,11 @@ EXECUTE FUNCTION worker_delete_validation();
 ```sql
 DELETE FROM autoservice_schema.worker where id = 1;
 ```
-![img_3.png](s1/imagezhneshen-01-12/img_3.png)
+![img_3.png](imagezhneshen-01-12/img_3.png)
 ```sql
 DELETE FROM autoservice_schema.worker where id = 12;
 ```
-![img_4.png](s1/imagezhneshen-01-12/img_4.png)
+![img_4.png](imagezhneshen-01-12/img_4.png)
 
 
 #### Триггер Row level. Автоматическое обновление статуса авто
@@ -305,7 +305,7 @@ FROM autoservice_schema.car
 WHERE vin = 'WBAAA31070B000002';
 ```
 
-![](s1/images-07-dima/vin3.png)
+![](images-07-dima/vin3.png)
 
 
 
@@ -338,7 +338,7 @@ EXECUTE FUNCTION block_at_night_payout();
 INSERT INTO autoservice_schema.payout (value, payout_type, worker_id)
 VALUES (999, 'Премия', 1);
 ```
-![img_5.png](s1/imagezhneshen-01-12/img_5.png)
+![img_5.png](imagezhneshen-01-12/img_5.png)
 
 
 #### Триггер Statement level. Логирование массовых изменений
@@ -362,7 +362,7 @@ SET value = value + 100
 WHERE id IN (1, 2, 3);
 ```
 
-![](s1/images-07-dima/vin4.png)
+![](images-07-dima/vin4.png)
 
 
 ## Кроны
@@ -376,9 +376,9 @@ SELECT cron.schedule(
 );
 ```
 До:
-![img_7.png](s1/imagezhneshen-01-12/img_7.png)
+![img_7.png](imagezhneshen-01-12/img_7.png)
 После
-![img_8.png](s1/imagezhneshen-01-12/img_8.png)
+![img_8.png](imagezhneshen-01-12/img_8.png)
 
 #### 2.1.1 каждую минуту/две меняет стоимость задачи
 
@@ -410,7 +410,7 @@ SELECT cron.schedule(
 SELECT * FROM cron.job;
 ```
 
-![](s1/images-07-dima/vin5.png)
+![](images-07-dima/vin5.png)
 
 
 
@@ -428,7 +428,7 @@ SELECT
 FROM cron.job
 ORDER BY jobid;
 ```
-![img_6.png](s1/imagezhneshen-01-12/img_6.png)
+![img_6.png](imagezhneshen-01-12/img_6.png)
 
 
 
@@ -438,8 +438,8 @@ ORDER BY jobid;
 SELECT * FROM cron.job_run_details;
 ```
 
-![img_28.png](s1/images-damir-01-12-25/img_28.png)
-![img_29.png](s1/images-damir-01-12-25/img_29.png)
+![img_28.png](images-damir-01-12-25/img_28.png)
+![img_29.png](images-damir-01-12-25/img_29.png)
 
 
 
@@ -449,4 +449,4 @@ SELECT * FROM cron.job_run_details;
 SELECT * FROM information_schema.triggers
 ```
 
-![](s1/images-07-dima/vin6.png)
+![](images-07-dima/vin6.png)

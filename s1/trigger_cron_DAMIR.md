@@ -35,7 +35,7 @@ FROM autoservice_schema.task
 WHERE id = 26;
 ```
 
-![img_27.png](s1/images-damir-01-12-25/img_27.png)
+![img_27.png](images-damir-01-12-25/img_27.png)
 
 ### 1.2. Триггеры на OLD
 #### 1.2.1
@@ -65,7 +65,7 @@ FROM autoservice_schema.task
 WHERE id = 24;
 ```
 
-![img_26.png](s1/images-damir-01-12-25/img_26.png)
+![img_26.png](images-damir-01-12-25/img_26.png)
 
 ### 1.3. Триггеры на BEFORE
 #### 1.3.1 триггер ставит цену задачи 100, если она меньше
@@ -93,7 +93,7 @@ SELECT order_id, value
 FROM autoservice_schema.task
 WHERE description = 'ура ура гол';
 ```
-![img_25.png](s1/images-damir-01-12-25/img_25.png)
+![img_25.png](images-damir-01-12-25/img_25.png)
 
 ### 1.4. Триггеры на AFTER
 #### 1.4.1 триггер пишет в консоль при создании нового пользователя
@@ -152,8 +152,8 @@ SELECT cron.schedule(
 SELECT * FROM cron.job_run_details;
 ```
 
-![img_28.png](s1/images-damir-01-12-25/img_28.png)
-![img_29.png](s1/images-damir-01-12-25/img_29.png)
+![img_28.png](images-damir-01-12-25/img_28.png)
+![img_29.png](images-damir-01-12-25/img_29.png)
 
 
 #### 2.2.2
