@@ -21,7 +21,7 @@ SET vin = 'NEW_FAKE_VIN_1234'
 WHERE vin = 'WVWZZZ1JZXW000001';
 ```
 
-![](images-07-dima/vin1.png)
+![](s1/images-07-dima/vin1.png)
 
 ### Триггер BEFORE. Коррекция отрицательной стоимости
 
@@ -51,7 +51,7 @@ WHERE description = 'Попытка ввода неверной цены'
 ORDER BY id DESC LIMIT 1;
 ```
 
-![](images-07-dima/vin2.png)
+![](s1/images-07-dima/vin2.png)
 ### Триггер Row level. Автоматическое обновление статуса авто
 
 ```sql
@@ -84,7 +84,7 @@ FROM autoservice_schema.car
 WHERE vin = 'WBAAA31070B000002';
 ```
 
-![](images-07-dima/vin3.png)
+![](s1/images-07-dima/vin3.png)
 
 ### Триггер Statement level. Логирование массовых изменений 
 
@@ -107,7 +107,7 @@ SET value = value + 100
 WHERE id IN (1, 2, 3);
 ```
 
-![](images-07-dima/vin4.png)
+![](s1/images-07-dima/vin4.png)
 
 ### Крон. Ежедневная очистка старых закупок
 
@@ -123,7 +123,7 @@ SELECT cron.schedule(
 SELECT * FROM cron.job;
 ```
 
-![](images-07-dima/vin5.png)
+![](s1/images-07-dima/vin5.png)
 
 ### Отображение списка триггеров
 
@@ -131,4 +131,4 @@ SELECT * FROM cron.job;
 SELECT * FROM information_schema.triggers
 ```
 
-![](images-07-dima/vin6.png)
+![](s1/images-07-dima/vin6.png)
