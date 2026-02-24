@@ -97,5 +97,3 @@ UPDATE autoservice_schema.autopart
 SET task_id = i
     FROM generate_series(1, 100000) i
 WHERE autopart.id = i;
-
-select * from autoservice_schema.branch_office;
