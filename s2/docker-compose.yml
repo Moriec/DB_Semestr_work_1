@@ -1,28 +1,77 @@
 version: "3.9"
 
 services:
-  postgres:
+  pg_master:
     image: postgres:15
-    container_name: pg_auto
+    container_name: pg_master
+    command: postgres -c wal_level=logical
     environment:
       POSTGRES_DB: auto_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
-
     ports:
       - "5432:5432"
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - pg_master_data:/var/lib/postgresql/data
+      - ./replication-scripts/init-master.sql:/docker-entrypoint-initdb.d/init-master.sql
+      - ./replication-scripts/init-master.sh:/docker-entrypoint-initdb.d/init-master.sh
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
 
+  pg_replica_1:
+    image: postgres:15
+    container_name: pg_replica_1
+    environment:
+      PGPASSWORD: 1234
+      REPLICA_SLOT: replica_1_slot
+    depends_on:
+      pg_master:
+        condition: service_healthy
+    volumes:
+      - ./replication-scripts/init-replica.sh:/init-replica.sh
+      - pg_replica_1_data:/var/lib/postgresql/data
+    entrypoint: ["bash", "/init-replica.sh"]
+    ports:
+      - "5433:5432"
+
+  pg_replica_2:
+    image: postgres:15
+    container_name: pg_replica_2
+    environment:
+      PGPASSWORD: 1234
+      REPLICA_SLOT: replica_2_slot
+    depends_on:
+      pg_master:
+        condition: service_healthy
+    volumes:
+      - ./replication-scripts/init-replica.sh:/init-replica.sh
+      - pg_replica_2_data:/var/lib/postgresql/data
+    entrypoint: ["bash", "/init-replica.sh"]
+    ports:
+      - "5434:5432"
+
+  pg_logical_replica:
+    image: postgres:15
+    container_name: pg_logical_replica
+    environment:
+      POSTGRES_DB: auto_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5435:5432"
+    volumes:
+      - pg_logical_data:/var/lib/postgresql/data
+    depends_on:
+      pg_master:
+        condition: service_healthy
+
   flyway:
     image: flyway/flyway
     depends_on:
-      postgres:
+      pg_master:
         condition: service_healthy
     command:
       - "migrate"
@@ -30,7 +79,7 @@ services:
     volumes:
       - ./flyway-migration:/flyway/sql
     environment:
-      FLYWAY_URL: jdbc:postgresql://postgres:5432/auto_db
+      FLYWAY_URL: jdbc:postgresql://pg_master:5432/auto_db
       FLYWAY_USER: postgres
       FLYWAY_PASSWORD: 1234
       FLYWAY_BASELINE_VERSION: 1
@@ -46,16 +95,16 @@ services:
     ports:
       - "5050:80"
     depends_on:
-      - postgres
+      - pg_master
 
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter:latest
     environment:
-      - DATA_SOURCE_NAME=postgresql://postgres:1234@postgres:5432/auto_db?sslmode=disable
+      - DATA_SOURCE_NAME=postgresql://postgres:1234@pg_master:5432/auto_db?sslmode=disable
     ports:
       - "9187:9187"
     depends_on:
-      - postgres
+      - pg_master
 
   prometheus:
     image: prom/prometheus:latest
@@ -76,4 +125,7 @@ services:
       - prometheus
 
 volumes:
-  pg_data:
+  pg_master_data:
+  pg_replica_1_data:
+  pg_replica_2_data:
+  pg_logical_data:
