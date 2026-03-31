@@ -68,6 +68,30 @@ services:
       pg_master:
         condition: service_healthy
 
+  pg_shard_1:
+    image: postgres:15
+    container_name: pg_shard_1
+    environment:
+      POSTGRES_DB: auto_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5436:5432"
+    volumes:
+      - pg_shard_1_data:/var/lib/postgresql/data
+
+  pg_shard_2:
+    image: postgres:15
+    container_name: pg_shard_2
+    environment:
+      POSTGRES_DB: auto_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5437:5432"
+    volumes:
+      - pg_shard_2_data:/var/lib/postgresql/data
+
   flyway:
     image: flyway/flyway
     depends_on:
@@ -129,3 +153,5 @@ volumes:
   pg_replica_1_data:
   pg_replica_2_data:
   pg_logical_data:
+  pg_shard_1_data:
+  pg_shard_2_data:
