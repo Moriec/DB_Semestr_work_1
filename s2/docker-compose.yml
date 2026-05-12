@@ -148,6 +148,37 @@ services:
     depends_on:
       - prometheus
 
+  producer:
+    build:
+      context: ./queue/producerBD
+      dockerfile: Dockerfile
+    container_name: producer
+    depends_on:
+      - flyway
+    restart: on-failure
+
+  consumer-1:
+    build:
+      context: ./queue/consumerBD
+      dockerfile: Dockerfile
+    container_name: consumer-1
+    environment:
+      - WORKER_ID=worker-1
+    depends_on:
+      - flyway
+    restart: on-failure
+
+  consumer-2:
+    build:
+      context: ./queue/consumerBD
+      dockerfile: Dockerfile
+    container_name: consumer-2
+    environment:
+      - WORKER_ID=worker-2
+    depends_on:
+      - flyway
+    restart: on-failure
+
 volumes:
   pg_master_data:
   pg_replica_1_data:
